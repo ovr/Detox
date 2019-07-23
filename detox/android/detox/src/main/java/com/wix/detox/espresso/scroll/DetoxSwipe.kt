@@ -1,7 +1,7 @@
 package com.wix.detox.espresso.scroll
 
 /**
- * Along with [BatchedSwiper], this was taken from Espresso's own implementation of Swiping
+ * Along with [FlinglessSwiper], this was taken from Espresso's own implementation of Swiping
  * (i.e. in [androidx.test.espresso.action.Swipe] - typically dispatched via the
  * [androidx.test.espresso.action.GeneralSwipeAction] action class).
  *

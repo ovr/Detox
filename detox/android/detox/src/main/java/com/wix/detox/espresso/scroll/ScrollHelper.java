@@ -1,6 +1,8 @@
 package com.wix.detox.espresso.scroll;
 
+import android.content.Context;
 import android.view.View;
+import android.view.ViewConfiguration;
 
 import com.wix.detox.espresso.UiAutomatorHelper;
 import com.wix.detox.espresso.common.annot.MotionDir;
@@ -75,11 +77,9 @@ public class ScrollHelper {
 
         for (int i = 0; i < times; ++i) {
             scrollOnce(uiController, view, direction, fullAmount);
-            uiController.loopMainThreadUntilIdle();
         }
 
         scrollOnce(uiController, view, direction, remainder);
-        uiController.loopMainThreadUntilIdle();
     }
 
     /**
@@ -112,8 +112,6 @@ public class ScrollHelper {
         } else {
             scrollOnce(uiController, view, direction, adjHeight);
         }
-
-        uiController.loopMainThreadUntilIdle();
     }
 
     private static void scrollOnce(UiController uiController, View view, @MotionDir int direction, int amount) throws ScrollEdgeException {
@@ -165,15 +163,16 @@ public class ScrollHelper {
         }
 
         // Log.d(LOG_TAG, "scroll downx: " + downX + " downy: " + downY + " upx: " + upX + " upy: " + upY);
-        doScroll(uiController, downX, downY, upX, upY);
+        doScroll(view.getContext(), uiController, downX, downY, upX, upY);
     }
 
-    private static void doScroll(final UiController uiController, int downX, int downY, int upX, int upY) {
+    private static void doScroll(final Context context, final UiController uiController, int downX, int downY, int upX, int upY) {
         // TODO lambda
         final Function1<Integer, DetoxSwiper> swipeExecutorProvider = new Function1<Integer, DetoxSwiper>() {
             @Override
             public DetoxSwiper invoke(Integer perMotionTimeMS) {
-                return new BatchedSwiper(uiController, perMotionTimeMS);
+                throw new IllegalStateException("perMotionTimeMS not used");
+//                return new FlinglessSwiper(uiController, ViewConfiguration.get(context));
             }
         };
         final DetoxSwipe detoxSwipe = new DetoxSwipe(downX, downY, upX, upY, SCROLL_DURATION_MS, SCROLL_MOTIONS, swipeExecutorProvider);
